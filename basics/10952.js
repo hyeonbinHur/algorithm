@@ -6,9 +6,8 @@ const input = require('fs')
 
 let count = 0;
 while (1) {
+    if (input[count] === undefined) break;
     const s = input[count].split(' ');
-    if (+s[0] === 0 && +s[1] === 0) break;
-
     console.log(+s[0] + +s[1]);
     count++;
 }
