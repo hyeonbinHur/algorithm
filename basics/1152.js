@@ -4,7 +4,8 @@ const input = require('fs')
     .trim()
     .split('\n');
 let count = 0;
-for (let i = 0; i < input[0].length; i++) {
-    if (input[0][i] === ' ') count++;
+let words = input[0].split(' ');
+for (let i = 0; i < words.length; i++) {
+    if (words[i] !== '') count++;
 }
-console.log(count + 1);
+console.log(count);
