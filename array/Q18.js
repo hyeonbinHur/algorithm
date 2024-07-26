@@ -14,7 +14,6 @@ const binary = (arr, num) => {
     let right = arr.length;
     let pivot = parseInt((left + right) / 2);
     let result = arr.sort((a, b) => a - b);
-
     while (1) {
         if (left > right) {
             pivot = false;
@@ -31,9 +30,7 @@ const binary = (arr, num) => {
         // console.log(left, right, pivot);
         pivot = parseInt((left + right) / 2);
     }
-
     return pivot, result;
 };
-
 let arr = [1, 3, 8, 2, 9];
 console.log(binary(arr, 8));
