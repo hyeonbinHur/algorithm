@@ -4,7 +4,6 @@ const input = require('fs')
     .trim()
     .split('\n')
     .slice(1);
-
 let arr = input
     .join(', ')
     .split(' ')
