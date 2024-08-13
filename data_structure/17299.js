@@ -24,7 +24,6 @@ const ans = (input) => {
     let ans = Array(input.length);
     let max = prequency_arr[0];
     stack.push(0);
-
     for (let i = 1; i < input.length; i++) {
         if (prequency_arr[i] > prequency_arr[stack[stack.length - 1]]) {
             while (1) {
