@@ -26,8 +26,8 @@ const ans = (input) => {
                 a = a - 90 + 64;
             }
             ans.push(String.fromCharCode(a));
-        } else {
-            ans.push(input[i]);
+        } else { 
+            ans.push(input[i]); 
         }
     }
     console.log(ans.join(''));
