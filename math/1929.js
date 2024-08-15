@@ -7,24 +7,25 @@ const input = require('fs')
     .map((e) => +e);
 
 const ans = (input) => {
-    const [M, N] = input;
-    const ans = Array(N + 1).fill(true);
-    const arr = [];
-    for (let i = 2; i < Math.sqrt(N); i++) {
-        for (let j = i + 1; j <= N; j++) {
-            if (ans[j]) {
-                if (j % i === 0) {
-                    ans[j] = false;
-                }
-            }
+    const [N, M] = input;
+
+    const arr = Array(M + 1).fill(true);
+    arr[1] = arr[0] = false;
+    const ans = [];
+
+    for (let i = 2; i <= Math.sqrt(M); i++) {
+        for (let j = i + i; j <= M; j += i) {
+            arr[j] = false;
         }
     }
-    for (let i = M; i <= N; i++) {
-        if (ans[i]) {
-            arr.push(i);
+
+    for (let i = N; i <= M; i++) {
+        if (arr[i]) {
+            ans.push(i);
         }
     }
-    console.log(arr.join('\n'));
+    const a = 2;
+    console.log(ans.join('\n'));
 };
 
 ans(input);
