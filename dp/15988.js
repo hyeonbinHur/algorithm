@@ -2,9 +2,9 @@ const input = require('fs')
     .readFileSync('./dev/stdin.txt')
     .toString()
     .trim()
-    .split('\n')
+    .split('/n')
     .slice(1)
-    .map((e) => e.replace('\r', ''))
+    .map((e) => e.replace('/r', ''))
     .map((e) => Number(e));
 
 const ans = (input) => {
