@@ -1,0 +1,55 @@
+pipeline {
+    agent any
+    environment {
+        EXPO_TOKEN = 'ygWB9ZV5xO0_3bj5DdXGoBV6EJPaD_Ve26yyl_-D'  // Expo에서 생성한 토큰으로 대체하세요.
+    }
+    stages {
+        stage('Cleanup Workspace') {
+            steps {
+                deleteDir() // 워크스페이스를 정리합니다.
+            }
+        }
+        stage('Clone Repository') {
+            steps {
+                checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/hyeonbinHur/rn_aora.git']])
+                echo 'Cloned the repository from main branch'
+            }
+        }
+        stage('install npm ') {
+            steps {
+               dir('C:/ProgramData/Jenkins/.jenkins/workspace/aora-pipeline') {
+                        bat "npm install"
+                }
+            }
+        }
+        stage('Build APK') {
+            steps {
+                script {
+                    dir('C:/ProgramData/Jenkins/.jenkins/workspace/aora-pipeline') {
+                        // EXPO_TOKEN을 사용하여 eas build 실행
+                        bat "C:\\Users\\hhb72\\AppData\\Roaming\\npm\\eas build --platform android --profile production --json --non-interactive > pipeline/build_result.txt"
+                    }
+                }
+            }
+        }
+         stage('install pipeline npm') {
+            steps {
+                script {
+                    dir('C:/ProgramData/Jenkins/.jenkins/workspace/aora-pipeline/pipeline') {
+                        bat "npm install"
+                    }
+                }
+            }
+        }
+        stage('Download APK') {
+            steps {
+                script {
+                    dir('C:/ProgramData/Jenkins/.jenkins/workspace/aora-pipeline/pipeline') {
+                        bat "npm install axios"
+                        bat "node apkDownload.js"
+                    }
+                }
+            }
+        }
+    }
+}
