@@ -37,12 +37,10 @@ pipeline {
                 }
             }
         }
-
-        
         stage('Update APK in Resources') {
             steps {
                 dir('target-repo/Resources') {
-                    script {
+                    script {    
                         sh """
                         # Remove existing APK files
                         rm -f *.apk

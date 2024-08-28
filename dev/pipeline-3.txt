@@ -4,6 +4,20 @@ pipeline {
         EXPO_TOKEN = 'ygWB9ZV5xO0_3bj5DdXGoBV6EJPaD_Ve26yyl_-D'  // Expo에서 생성한 토큰으로 대체하세요.
     }
     stages {
+        stage('Start first pipeline') {
+            steps {
+                 writeFile file: 'art.txt', text: '''
+     _______.___________.    ___      .______     .___________.    __       _______.___________.   .______    __  .______    _______  __       __  .__   __.  _______ 
+    /       |           |   /   \\     |   _  \\    |           |   /_ |     /       |           |   |   _  \\  |  | |   _  \\  |   ____||  |     |  | |  \\ |  | |   ____|
+   |   (----`---|  |----`  /  ^  \\    |  |_)  |   `---|  |----`    | |    |   (----`---|  |----`   |  |_)  | |  | |  |_)  | |  |__   |  |     |  | |   \\|  | |  |__   
+    \\   \\       |  |      /  /_\\  \\   |      /        |  |         | |     \\   \\       |  |        |   ___/  |  | |   ___/  |   __|  |  |     |  | |  . `  | |   __|  
+.----)   |      |  |     /  _____  \\  |  |\\  \\----.   |  |         | | .----)   |      |  |        |  |      |  | |  |      |  |____ |  `----.|  | |  |\\   | |  |____ 
+|_______/       |__|    /__/     \\__\\ | _| `._____|   |__|         |_| |_______/       |__|        | _|      |__| | _|      |_______||_______||__| |__| \\__| |_______|
+                    '''
+                    bat "type art.txt"
+                
+            }
+        }
         stage('Cleanup Workspace') {
             steps {
                 deleteDir() // 워크스페이스를 정리합니다.
@@ -11,10 +25,14 @@ pipeline {
         }
         stage('Clone Repository') {
             steps {
-                checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/hyeonbinHur/rn_aora.git']])
-                echo '---------------Cloned the source code repository from main branch---------------'
+                  
+                    echo '------------------------------Start to clone source code repository------------------------------'
+                 
+                checkout scmGit(branches: [[name: '*/test']], extensions: [], userRemoteConfigs: [[credentialsId: 'ef3df39a-ffb3-49cd-b5ba-3cf45fded93f', url: 'https://ai-powered-ui-test-admin@bitbucket.org/capstone-visual-testing-automation/aora-source-code.git']])
+             
             }
         }
+       
         stage('install npm ') {
             steps {
                dir('C:/ProgramData/Jenkins/.jenkins/workspace/aora-pipeline') {
@@ -25,11 +43,15 @@ pipeline {
         stage('Build APK') {
             steps {
                 script {
+                  
+                    echo '------------------------------Start to build new apk------------------------------'
+                  
                     dir('C:/ProgramData/Jenkins/.jenkins/workspace/aora-pipeline') {
                         // EXPO_TOKEN을 사용하여 eas build 실행
                         bat "C:\\Users\\hhb72\\AppData\\Roaming\\npm\\eas build --platform android --profile production --json --non-interactive > pipeline/build_result.txt"
                     }
-                    echo '---------------Completed to build new apk---------------'
+                 
+
                 }
             }
         }
@@ -45,11 +67,14 @@ pipeline {
         stage('Download APK') {
             steps {
                 script {
+                
+                    echo '------------------------------Start to download new apk------------------------------'
+               
                     dir('C:/ProgramData/Jenkins/.jenkins/workspace/aora-pipeline/pipeline') {
                         bat "npm install axios"
                         bat "node apkDownload.js"
                     }
-                      echo '---------------Completed to download new apk---------------'
+                 
                 }
             }
         }
@@ -69,6 +94,7 @@ pipeline {
         }
         stage('Update APK in Resources') {
             steps {
+                echo '------------------------------Start to update new apk to test code repository------------------------------'
                 dir('target-repo/aora-visual-testing/Resources') {
                     script {    
                         bat """
@@ -79,9 +105,10 @@ pipeline {
                         """
                     }
                 }
-                echo '---------------Update new apk to test code repository---------------'
+                
             }
         }
+        
         
         stage('Commit and Push') {
             steps {
@@ -98,6 +125,21 @@ pipeline {
                         }
                     }
                 }
+            }
+        }
+
+        stage('Success') {
+            steps {
+                 writeFile file: 'art.txt', text: '''
+     _______. __    __    ______   ______  _______     _______.     _______. __   __  
+    /       ||  |  |  |  /      | /      ||   ____|   /       |    /       ||  | |  | 
+   |   (----`|  |  |  | |  ,----'|  ,----'|  |__     |   (----`   |   (----`|  | |  | 
+    \\   \\    |  |  |  | |  |     |  |     |   __|     \\   \\        \\   \\    |  | |  | 
+.----)   |   |  `--'  | |  `----.|  `----.|  |____.----)   |   .----)   |   |__| |__| 
+|_______/     \\______/   \\______| \\______||_______|_______/    |_______/    (__) (__) 
+                    '''
+                    
+                    bat "type art.txt"
             }
         }
     }
