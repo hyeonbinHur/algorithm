@@ -10,7 +10,8 @@ const [n, m] = input;
 const arr = Array(m + 1).fill(0);
 const used = Array(n + 1).fill(false);
 const result = [];
-const backTracking = (k, last) => {
+
+const backTrackin = (k) => {
     if (k === m) {
         let current = [];
         for (let i = 0; i < k; i++) {
@@ -19,20 +20,12 @@ const backTracking = (k, last) => {
         result.push(current);
         return;
     }
-    for (let i = last + 1; i <= n; i++) {
-        if (!used[i]) {
-            arr[k] = i;
-            used[i] = true;
-            backTracking(k + 1, i);
-            used[i] = false;
-        }
+
+    for (let i = 1; i <= n; i++) {
+        arr[k] = i;
+        backTrackin(k + 1);
     }
 };
 
-const ans = () => {
-    backTracking(0, 0);
-};
-
-ans();
-
+backTrackin(0);
 console.log(result.map((e) => e.join(' ')).join('\n'));
