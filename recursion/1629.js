@@ -6,7 +6,6 @@ const input = require('fs')
     .split(' ')
     .map((e) => BigInt(e));
 const [a, b, c] = input;
-
 const ans = (current, n) => {
     if (n === 1n) {
         return current % c;
