@@ -16,6 +16,7 @@ let count = 0;
 
 const backTrackin = (k, last, current) => {
     let value = arr.reduce((prev, next) => prev + next, 0);
+
     if (value === s) {
         count++;
     }
