@@ -11,23 +11,24 @@ const [n, m] = input;
 const arr = Array(m + 1).fill(0);
 const used = Array(n + 1).fill(false);
 const result = [];
-const ans = (k) => {
+
+const backTrackin = (k) => {
     if (k === m) {
-        let current = [];
+        let current = '';
         for (let i = 0; i < m; i++) {
-            current.push(arr[i]);
+            current += arr[i] + ' ';
         }
         result.push(current);
-        return;
     }
+
     for (let i = 1; i <= n; i++) {
         if (used[i] === false) {
             arr[k] = i;
             used[i] = true;
-            ans(k + 1);
+            backTrackin(k + 1);
             used[i] = false;
         }
     }
 };
-ans(0);
-console.log(result.map((e) => e.join(' ')).join('\n'));
+backTrackin(0);
+console.log(result.join('\n'));
