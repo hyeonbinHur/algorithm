@@ -14,10 +14,6 @@ const graph = [...input]
     .map((e) => e.split(''))
     .map((e) => e.map((e2) => Number(e2)));
 
-const checked = Array.from({ length: n }, () => Array(m).fill(false));
-
-const result = [];
-
 const dir = [
     [0, 1],
     [0, -1],
@@ -25,35 +21,25 @@ const dir = [
     [1, 0],
 ];
 
-const bfs = (y, x, size, checked) => {
-    const queue = [[y, x]];
-    const newChecked = [...checked];
-    newChecked[y][x] = true;
-    let newSize = size;
-    console.log(y, x, size);
-    if (y === n - 1 && x === m - 1) {
-        console.log('arrive');
-        console.log(y, x);
-        result.push(size);
-        return;
-    }
-    while (queue.length > 0) {
-        const coordinate = queue.shift();
+const bfs = () => {
+    const queue = [[0, 0, 1]]; // 좌표, 움직인 칸 수
+    while (queue.length) {
+        const [currentRow, currentCol, move] = queue.shift();
+        if (currentRow === n - 1 && currentCol === m - 1) return move; // 만약 도착했다면 얼마나 움직였는지를 리턴
         dir.map((e) => {
-            const xPos = coordinate[1] + e[1];
-            const yPos = coordinate[0] + e[0];
-            if (xPos >= 0 && xPos < m && yPos >= 0 && yPos < n) {
-                if (graph[yPos][xPos] === 1) {
-                    if (!newChecked[yPos][xPos]) {
-                        newChecked[yPos][xPos] = true;
-                        queue.push([yPos, xPos]);
-                        newSize++;
-                        bfs(yPos, xPos, newSize, newChecked);
-                    }
-                }
+            const xPos = e[1] + currentCol;
+            const yPos = e[0] + currentRow;
+            if (
+                xPos >= 0 &&
+                yPos >= 0 &&
+                xPos < m &&
+                yPos < n &&
+                graph[yPos][xPos] === 1
+            ) {
+                graph[yPos][xPos] = 0;
+                queue.push([yPos, xPos, move + 1]);
             }
         });
     }
 };
-bfs(0, 0, 1, checked);
-console.log(result);
+console.log(bfs());
