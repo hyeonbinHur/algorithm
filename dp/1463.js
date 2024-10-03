@@ -2,28 +2,30 @@ const input = require('fs')
     .readFileSync('./dev/stdin.txt')
     .toString()
     .trim()
-    .split('\n');
+    .split('\n')[0];
 
-const ans = (input) => {
-    const ans = [];
-    ans.push(0);
-    ans.push(0);
+const ans = () => {
+    const num = +input;
 
-    for (let i = 2; i <= +input; i++) {
-        ans[i] = ans[i - 1] + 1;
+    const dp = Array(num + 1).fill(Infinity);
+
+    dp[num] = 0;
+    for (let i = dp.length - 1; i >= 0; i--) {
+        if (i % 3 === 0) {
+            if (dp[i / 3] > dp[i] + 1) {
+                dp[i / 3] = dp[i] + 1;
+            }
+        }
         if (i % 2 === 0) {
-            ans[i] > ans[i / 2] + 1
-                ? (ans[i] = ans[i / 2] + 1)
-                : (ans[i] = ans[i]);
+            if (dp[i / 2] > dp[i] + 1) {
+                dp[i / 2] = dp[i] + 1;
+            }
         }
 
-        if (i % 3 === 0) {
-            ans[i] > ans[i / 3] + 1
-                ? (ans[i] = ans[i / 3] + 1)
-                : (ans[i] = ans[i]);
+        if (dp[i - 1] > dp[i] + 1) {
+            dp[i - 1] = dp[i] + 1;
         }
     }
-
-    console.log(ans[+input]);
+    console.log(dp[1]);
 };
-ans(input);
+ans();
