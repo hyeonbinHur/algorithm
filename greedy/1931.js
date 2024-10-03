@@ -3,24 +3,30 @@ const input = require('fs')
     .toString()
     .trim()
     .split('\n')
-    .map((e) => e.replace('\r', ''))
     .slice(1)
+    .map((e) => e.replace('\r', ''))
     .map((e) => e.split(' '))
-    .map((e) => e.map((e2) => Number(e2)))
-    .sort((a, b) => a[0] - b[0])
-    .sort((a, b) => a[1] - b[1]);
+    .map((e) => e.map((e2) => Number(e2)));
 
 const ans = () => {
-    let count = 0;
-    let lastEnd = -1;
-    for (let i = 0; i < input.length; i++) {
-        let currentStart = input[i][0];
-        let currentEnd = input[i][1];
-        if (currentStart >= lastEnd) {
-            lastEnd = currentEnd;
-            count++;
+    const meetings = [...input].sort((a, b) => {
+        if (a[1] === b[1]) {
+            return a[0] - b[0];
+        }
+        return a[1] - b[1];
+    });
+
+    let ans = 0;
+    let currentStart = 0;
+    let currentEnd = 0;
+    for (let i = 0; i < meetings.length; i++) {
+        const [start, end] = meetings[i];
+        if (currentEnd <= start) {
+            ans++;
+            currentStart = start;
+            currentEnd = end;
         }
     }
-    console.log(count);
+    console.log(ans);
 };
 ans();

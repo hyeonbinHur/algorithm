@@ -3,21 +3,19 @@ const input = require('fs')
     .toString()
     .trim()
     .split('\n')
-    .map((e) => e.replace('\r', ''))
-    .map((e) => e.split(' '));
-
-const [n, k] = input[0];
-
+    .map((e) => e.replace('\r', ''));
 const ans = () => {
-    let value = +k;
-    let num = 0;
-    for (let i = input.length - 1; i > 0; i--) {
-        const current = +input[i];
-        if (value / current >= 1) {
-            num += parseInt(value / current);
-            value -= current * parseInt(value / current);
+    let [n, k] = input.shift().split(' ');
+    const coins = [...input].map((e) => Number(e));
+    let ans = 0;
+    for (let i = coins.length - 1; i >= 0; i--) {
+        const val = Math.floor(k / coins[i]);
+        if (val >= 1) {
+            k -= val * coins[i];
+            ans += val;
         }
     }
-    console.log(num);
+    console.log(ans);
 };
+
 ans();
