@@ -3,43 +3,44 @@ const input = require('fs')
     .toString()
     .trim()
     .split('\n')
-    .map((e) => e.replace('\r', ''));
-
-const [n, m] = input
-    .shift()
-    .split(' ')
-    .map((e) => Number(e));
-
-const graph = [...input]
+    .map((e) => e.replace('\r', ''))
+    .slice(1)
     .map((e) => e.split(''))
     .map((e) => e.map((e2) => Number(e2)));
-
+const grid = JSON.parse(JSON.stringify(input));
 const dir = [
+    [1, 0],
+    [-1, 0],
     [0, 1],
     [0, -1],
-    [-1, 0],
-    [1, 0],
 ];
+const bfs = (x, y) => {
+    const q = [[0, 0]];
 
-const bfs = () => {
-    const queue = [[0, 0, 1]]; // 좌표, 움직인 칸 수
-    while (queue.length) {
-        const [currentRow, currentCol, move] = queue.shift();
-        if (currentRow === n - 1 && currentCol === m - 1) return move; // 만약 도착했다면 얼마나 움직였는지를 리턴
+    while (q.length) {
+        const [curY, curX] = q.shift();
         dir.map((e) => {
-            const xPos = e[1] + currentCol;
-            const yPos = e[0] + currentRow;
+            const xPos = curX + e[1];
+            const yPos = curY + e[0];
+
             if (
-                xPos >= 0 &&
                 yPos >= 0 &&
-                xPos < m &&
-                yPos < n &&
-                graph[yPos][xPos] === 1
+                xPos >= 0 &&
+                xPos < x &&
+                yPos < y &&
+                grid[yPos][xPos] === 1
             ) {
-                graph[yPos][xPos] = 0;
-                queue.push([yPos, xPos, move + 1]);
+                grid[yPos][xPos] = grid[curY][curX] + 1;
+                q.push([yPos, xPos]);
             }
         });
     }
 };
-console.log(bfs());
+
+const ans = () => {
+    const x = grid[0].length;
+    const y = grid.length;
+    bfs(x, y);
+    console.log(grid[y - 1][x - 1]);
+};
+ans();
