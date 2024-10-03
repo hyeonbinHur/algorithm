@@ -8,8 +8,9 @@ const input = require('fs')
 
 const [n, m] = input;
 
-const arr = Array(m + 1).fill(0);
+const arr = [];
 const used = Array(n + 1).fill(false);
+
 const result = [];
 
 const backTrackin = (k) => {
@@ -27,8 +28,10 @@ const backTrackin = (k) => {
             used[i] = true;
             backTrackin(k + 1);
             used[i] = false;
+            console.log(arr);
         }
     }
 };
 backTrackin(0);
 console.log(result.join('\n'));
+// console.log(arr);
