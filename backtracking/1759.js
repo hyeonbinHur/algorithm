@@ -5,41 +5,45 @@ const input = require('fs')
     .split('\n')
     .map((e) => e.replace('\r', ''))
     .map((e) => e.split(' '));
+const ans = () => {
+    const [n, m] = input.shift().map((e) => Number(e)); // n개
+    const arr = input.shift().sort();
+    const visit = Array(arr.length).fill(false);
+    const ans = [];
+    const result = [];
 
-const [n, s] = input[0];
-const chars = input[1].sort();
-const used = Array(+s).fill(false);
-const arr = Array(+n).fill(0);
-const result = [];
-const cons = ['a', 'e', 'i', 'o', 'u'];
-
-const backTrackin = (k, last) => {
-    if (k === +n) {
-        let current = '';
-        let consonent = 0;
-        let vowl = 0;
-        for (let i = 0; i < k; i++) {
-            current += arr[i];
-            const index = cons.indexOf(arr[i]);
-            if (index !== -1) {
-                consonent++;
-            } else {
-                vowl++;
+    const backTrackin = (k, start) => {
+        if (k === n) {
+            let count1 = 0;
+            let count2 = 0;
+            for (let i = 0; i < ans.length; i++) {
+                const c = ans[i];
+                if (
+                    c === 'a' ||
+                    c === 'e' ||
+                    c === 'i' ||
+                    c === 'o' ||
+                    c === 'u'
+                )
+                    count1++;
+                else count2++;
+            }
+            if (count1 >= 1 && count2 >= 2) {
+                result.push(ans.join(''));
+            }
+        } else {
+            for (let i = start; i < arr.length; i++) {
+                if (visit[i] === false) {
+                    ans[k] = arr[i];
+                    visit[i] = true;
+                    backTrackin(k + 1, i + 1);
+                    visit[i] = false;
+                }
             }
         }
-        if (consonent >= 1 && vowl >= 2) {
-            result.push(current);
-        }
-    }
+    };
 
-    for (let i = last; i < +s; i++) {
-        if (!used[i]) {
-            arr[k] = chars[i];
-            used[i] = true;
-            backTrackin(k + 1, i);
-            used[i] = false;
-        }
-    }
+    backTrackin(0, 0);
+    console.log(result.join('\n'));
 };
-backTrackin(0, 0);
-console.log(result.join('\n'));
+ans();

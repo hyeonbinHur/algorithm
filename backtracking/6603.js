@@ -5,38 +5,36 @@ const input = require('fs')
     .split('\n')
     .map((e) => e.replace('\r', ''))
     .map((e) => e.split(' '))
-    .map((e) => e.map((e2) => Number(e2)));
-
-let arr = Array(6).fill(0);
-let used;
-let nums;
-let result = [];
-
-const backTrackin = (k, last) => {
-    if (k === 6) {
-        let current = '';
-        for (let i = 0; i < 6; i++) {
-            current += arr[i] + ' ';
-        }
-        result.push(current);
-    }
-
-    for (let i = last; i < nums.length; i++) {
-        if (!used[i]) {
-            arr[k] = nums[i];
-            used[i] = true;
-            backTrackin(k + 1, i);
-            used[i] = false;
-        }
-    }
-};
+    .map((e) => e.map((e2) => Number(e2)))
+    .map((e) => e.slice(1));
 
 const ans = () => {
+    let arr = [];
+    let ans = [];
+    let result = [];
+    let visit = [];
+
+    const backTrackin = (k, start) => {
+        if (k === 6) {
+            result.push(ans.join(' '));
+        } else {
+            for (let i = start; i < arr.length; i++) {
+                if (visit[i] === false) {
+                    ans[k] = arr[i];
+                    visit[i] = true;
+                    backTrackin(k + 1, i + 1);
+                    visit[i] = false;
+                }
+            }
+        }
+    };
+
     for (let i = 0; i < input.length - 1; i++) {
-        used = Array(arr.length).fill(false);
-        nums = input[i].slice(1);
+        arr = input[i];
+        visit = Array(arr.length).fill(false);
         backTrackin(0, 0);
-        console.log(result.join('\n') + '\n');
+        console.log(result.join('\n'));
+        console.log();
         result = [];
     }
 };
