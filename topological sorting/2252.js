@@ -20,14 +20,17 @@ const ans = () => {
         indegree[next - 1]++;
         adjList[prev - 1].push(next - 1);
     }
-    console.log(adjList);
     const queue = [];
     const result = [];
+
     for (let i = 0; i < indegree.length; i++) {
         if (indegree[i] === 0) {
             queue.push(i);
         }
     }
+    console.log(adjList);
+    console.log(queue);
+    console.log(indegree);
 
     while (queue.length) {
         const current = queue.shift();
