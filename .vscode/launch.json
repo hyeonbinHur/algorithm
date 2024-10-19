@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "lldb",
+      "request": "launch",
+      "args": [],
+      "cwd": "/Users/hb/Documents/GitHub/algorithm/bitmasking",
+      "program": "/Users/hb/Documents/GitHub/algorithm/bitmasking/build/Debug/outDebug"
+    }
+  ]
+}
