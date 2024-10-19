@@ -1,45 +1,38 @@
-const input = require("fs")
-  .readFileSync("./dev/stdin.txt")
-  .toString()
-  .trim()
-  .split("\n")[0]
-  .split(" ")
-  .map((e) => Number(e));
+const fs = require("fs");
 
-const [n, k] = input;
-const bfs = () => {
-  const q = [[n, 0]];
-  const visit = [];
-  const path = [];
-  while (q.length) {
-    const [cur, curTime] = q.shift();
-    if (cur === k) {
-      val = visit[cur];
-      path.push(cur);
-      path.push(val);
-      while (val !== n) {
-        val = visit[val];
-        path.push(val);
+const sol = (input) => {
+  const [N, K] = input.split(" ").map(Number);
+  const path = Array.from({ length: 100100 }, () => 0);
+  const visit = Array.from({ length: 100100 }, () => 0);
+  function bfs(N) {
+    const queue = [];
+    queue.push([N, 0]);
+    visit[N] = 1;
+    while (queue.length) {
+      const [cur, time] = queue.shift();
+      if (cur === K) {
+        console.log(time);
+        return time;
       }
-      console.log(curTime);
-      console.log(path.reverse().join(" "));
-      break;
-    }
-    const dir1 = cur + 1;
-    const dir2 = cur - 1;
-    const dir3 = cur * 2;
-    if (!visit[dir1]) {
-      visit[dir1] = cur;
-      q.push([dir1, curTime + 1]);
-    }
-    if (!visit[dir2]) {
-      visit[dir2] = cur;
-      q.push([dir2, curTime + 1]);
-    }
-    if (!visit[dir3]) {
-      visit[dir3] = cur;
-      q.push([dir3, curTime + 1]);
+      for (next of [cur - 1, cur + 1, cur * 2]) {
+        if (!visit[next] && next >= 0 && next <= 100000) {
+          path[next] = cur;
+          visit[next] = 1;
+          queue.push([next, time + 1]);
+        }
+      }
     }
   }
+  const time = bfs(N);
+  const order = [];
+  order.push(K);
+  let prev = path[K];
+  for (let i = 0; i < time; i++) {
+    order.push(prev);
+    prev = path[prev];
+  }
+  console.log(order.reverse().join(" "));
 };
-bfs();
+
+const input = fs.readFileSync("./dev/stdin.txt", "utf-8").trim();
+sol(input);
