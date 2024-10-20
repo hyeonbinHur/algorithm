@@ -1,47 +1,14 @@
-/**
- * @param {string} s
- * @return {string}
- */
-var reorganizeString = function (s) {
-    const arr = s.split('');
-    const fre = Array(26).fill(0);
-    for (let i = 0; i < arr.length; i++) {
-        const idx = arr[i].charCodeAt() - 97;
-        fre[idx]++;
-    }
-    const ans = [];
-    let count = 0;
-    let pre = null;
-    let max = 0;
-    let idx = 0;
-
-    while (1) {
-        max = 0;
-
-        for (let i = 0; i < 26; i++) {
-            if (max <= fre[i] && i !== pre) {
-                max = fre[i];
-                idx = i;
-            }
-        }
-
-        if (max === 0) {
-            break;
-        }
-
-        ans.push(String.fromCharCode(idx + 97));
-        fre[idx]--;
-        pre = idx;
-    }
-    if (Math.max(...fre) > 0) {
-        console.log('');
-        return '';
-    } else {
-        console.log(ans);
-        return ans;
-    }
+const lc = [1, 3, 0, 0, 0, 0];
+const rc = [2, 4, 5, 0, 0, 0];
+const arr = "aababa";
+let ans = [];
+const postoder = (cur) => {
+  if (lc[cur] !== 0) postoder(lc[cur]);
+  if (rc[cur] !== 0) postoder(rc[cur]);
+  ans.push(arr[cur]);
 };
-reorganizeString('aaab');
-
-// const a = 97;
-// console.log(String.fromCharCode(a));
+for (let i = 0; i < arr.length; i++) {
+  ans = [];
+  postoder(i);
+  console.log(ans.join(""));
+}
