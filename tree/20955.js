@@ -6,49 +6,40 @@ const input = require("fs")
   .split("\n")
   .map((e) => e.split(" "))
   .map((e) => e.map((e2) => Number(e2)));
+const [n, e] = input.shift();
+const p = Array.from({ length: n + 1 }, (_, i) => i);
+const findP = (node) => {
+  if (node !== p[node]) {
+    p[node] = findP(p[node]);
+  }
+  return p[node];
+};
+
+const union = (a, b) => {
+  const pa = findP(a);
+  const pb = findP(b);
+  p[pa] = pb;
+};
 
 const ans = () => {
-  const [n, e] = input.shift();
-  const tree = {};
+  let cutCount = 0;
   for (let i = 0; i < input.length; i++) {
-    const [s, e] = input[i];
-    if (!tree[s]) {
-      tree[s] = [];
-    }
-    if (!tree[e]) {
-      tree[e] = [];
-    }
-    tree[s].push(e);
-    tree[e].push(s);
-  }
-  const keys = Object.keys(tree);
-  const visit = {};
-  for (let i = 0; i < keys.length; i++) {
-    const val = keys[i];
-    visit[val] = 0;
-  }
-  let count = 0;
-  const bfs = (current) => {
-    const q = [current];
-    while (q.length) {
-      const cur = q.shift();
-      for (let i = 0; i < tree[cur].length; i++) {
-        const val = tree[cur][i];
-        if (visit[val] === 0) {
-          q.push(val);
-          visit[val] = 1;
-        }
-      }
-    }
-  };
-  for (let i = 0; i < keys.length; i++) {
-    const isVisit = visit[keys[i]];
-    if (isVisit === 0) {
-      count++;
-      visit[keys[i]] = 1;
-      bfs(keys[i]);
+    const [a, b] = input[i];
+    if (findP(a) === findP(b)) {
+      cutCount++;
+    } else {
+      union(Math.max(findP(a), findP(b)), Math.min(findP(a), findP(b)));
     }
   }
-  console.log(count - 1);
+
+  const result = new Set();
+  for (let i = 1; i <= n; i++) {
+    const curP = findP(i);
+    if (!result.has(curP)) {
+      result.add(curP);
+    }
+  }
+
+  console.log(result.size - 1 + cutCount);
 };
 ans();
