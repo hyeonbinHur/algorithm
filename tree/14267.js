@@ -13,7 +13,6 @@ const results = Array(n + 1).fill(0);
 const dfs = (node, value) => {
   const stack = [node];
   results[node] += value;
-
   while (stack.length) {
     const cur = stack.pop();
     if (tree[cur])
