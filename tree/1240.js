@@ -21,7 +21,6 @@ const ans = () => {
     const visit = Array(n + 1).fill(0);
     const q = [[start, 0]];
     visit[start] = 1;
-
     while (q.length) {
       const [node, dist] = q.shift();
       if (node === end) {
