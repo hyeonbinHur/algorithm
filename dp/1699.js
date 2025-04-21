@@ -6,7 +6,6 @@ const input = require('fs')
 
 const ans = (input) => {
     const dp = [];
-
     for (let i = 0; i <= +input; i++) {
         dp[i] = i;
         for (let j = 0; j <= Math.sqrt(i); j++) {

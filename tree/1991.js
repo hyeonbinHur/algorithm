@@ -13,7 +13,6 @@ const ans = () => {
     const [p, l, r] = input[i];
     tree[p] = [l, r];
   }
-  console.log(tree);
   let visit = Array.from({ length: input.length }, () => false);
   const post = [];
   const postorder = (cur) => {
